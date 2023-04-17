@@ -17,6 +17,11 @@ PRIORITY_NAME_TO_CODE_MAP = {
 PRIORITY_CODE_TO_NAME_MAP = {
     code: name for name, code in PRIORITY_NAME_TO_CODE_MAP.items()
 }
+CHOICES = (
+    (LOW_PRIORITY_CODE, LOW_PRIORITY_NAME),
+    (MEDIUM_PRIORITY_CODE, MEDIUM_PRIORITY_NAME),
+    (HIGH_PRIORITY_CODE, HIGH_PRIORITY_NAME)
+)
 
 
 class TimeStampMixin(models.Model):
@@ -34,7 +39,7 @@ class ToDo(TimeStampMixin):
     is_completed = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ('for_date', 'title')
+        unique_together = ('for_date', 'title', 'priority_code')
 
     @property
     def priority(self):

@@ -1,3 +1,6 @@
+import datetime
+
+from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import TemplateView
@@ -11,8 +14,10 @@ class IndexPage(TemplateView):
     template_name = 'home.html'
 
     def get_context_data(self, **kwargs):
+        form = ToDoForm()
         context = {
-            'todos': get_todos()
+            'todos': get_todos(),
+            'form': form
         }
         return context
 
@@ -27,12 +32,14 @@ class CreateToDoCreateView(TemplateView):
         context = {'form': form}
         if form.is_valid():
             todo = form.save(commit=False)
-            todo.for_date = '2023-05-16'
-            todo.save()
-            return HttpResponseRedirect('/')
-        else:
-            print(form.errors)
-            pass
+            todo.name = None
+            todo.for_date = datetime.datetime.now()
+            try:
+                todo.save()
+            except IntegrityError as e:
+                form.add_error('title', 'ToDo with given title and priority already exists')
+            if not form.errors:
+                return HttpResponseRedirect('/')
 
         return render(request, self.template_name, context=context)
 
