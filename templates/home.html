@@ -9,7 +9,7 @@
             <div class="card">
                 <div class="card-body">
                     <div id="form" class="needs-validation" novalidate>
-                        <form action="/create-todo/" method="POST">
+                        <form action="/todos" method="POST">
                             {% csrf_token %}
                             <div class="row input-group">
                                 <div class="col mb-3 has-validation">
@@ -44,7 +44,7 @@
                 {% for todo in todos %}
                     <li class="list-group-item list-group-item-{% if todo.priority_code == 1 %}danger{% elif todo.priority_code == 2%}warning{% else %}secondary{% endif %}">
                         {{ todo }}
-                        <a href="/delete-todo/{{ todo.id }}" class="list-group-item-action">
+                        <a href="/todos/{{ todo.id }}" class="list-group-item-action">
                             <span class="bi bi-trash float-end"></span>
                         </a>
                     </li>
